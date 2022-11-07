@@ -25,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/bugtamer/async-status-js/issues"
   },
-  "homepage": "https://github.com/bugtamer/async-status-js#readme"
+  "homepage": "https://github.com/bugtamer/async-status-js#readme",
+  "devDependencies": {
+    "@types/node": "^18.11.9"
+  }
 }
