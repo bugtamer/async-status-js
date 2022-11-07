@@ -4,7 +4,16 @@
   "description": "Asynchronous process status helper.",
   "main": "index.js",
   "scripts": {
-    "transpile": "tsc"
+    "transpile": "tsc",
+    "test": "tsc --outDir spec && jasmine",
+    "coverage": "nyc --reporter=lcov npm run test"
+  },
+  "nyc": {
+    "report-dir": "spec/coverage",
+    "exclude": [
+      "spec/**/*.interface.js",
+      "spec/**/*.spec.js"
+    ]
   },
   "repository": {
     "type": "git",
