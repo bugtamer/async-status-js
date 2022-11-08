@@ -1,13 +1,36 @@
-import { AsyncStatus } from './async-status.model';
+import { AsyncStatus } from './async-status';
+
+
+const OVERFLOW_ERROR_PATTERN = /overflow/i;
+const START_ERROR_PATTERN = /start\(\)/i;
+const END_ERROR_PATTERN = /end\(\)/i;
+const ABORT_ERROR_PATTERN = /abort\(\)/i;
+
+class AsyncStatusOverflowCase extends AsyncStatus {
+  setAttemptCount(newCount: number): void {
+    this._attemptCount = newCount;
+  }
+}
 
 
 describe("AsyncStatus throws an Error when", function() {
+
+  it("attemptCount overflows", function() { 
+    const sut = new AsyncStatusOverflowCase();
+    sut.start();
+    sut.end();
+    sut.setAttemptCount(Number.MAX_SAFE_INTEGER); // start() --> end() | abort() cycles...
+    const fn = () => sut.start();
+    expect(fn).toThrowError(OVERFLOW_ERROR_PATTERN);
+  });
+
 
   it("start() is never called and end() is called", function() { 
     const sut = new AsyncStatus();
     // nothing is already running
     expect(sut.isIdle).toBe(true);
-    expect(sut.end).toThrowError();
+    const fn = () => sut.end();
+    expect(fn).toThrowError(END_ERROR_PATTERN);
   });
 
 
@@ -15,7 +38,8 @@ describe("AsyncStatus throws an Error when", function() {
     const sut = new AsyncStatus();
     // nothing is already running
     expect(sut.isIdle).toBe(true);
-    expect(sut.abort).toThrowError();
+    const fn = () => sut.abort();
+    expect(fn).toThrowError(ABORT_ERROR_PATTERN);
   });
 
 
@@ -24,7 +48,8 @@ describe("AsyncStatus throws an Error when", function() {
     sut.start();
     // async process
     expect(sut.isOngoing).toBe(true);
-    expect(sut.start).toThrowError();
+    const fn = () => sut.start();
+    expect(fn).toThrowError(START_ERROR_PATTERN);
   });
 
 
@@ -34,7 +59,8 @@ describe("AsyncStatus throws an Error when", function() {
     // async process
     sut.end();
     expect(sut.isIdle).toBe(true);
-    expect(sut.end).toThrowError();
+    const fn = () => sut.end();
+    expect(fn).toThrowError(END_ERROR_PATTERN);
   });
 
 
@@ -44,7 +70,8 @@ describe("AsyncStatus throws an Error when", function() {
     // async process
     sut.abort();
     expect(sut.isIdle).toBe(true);
-    expect(sut.abort).toThrowError();
+    const fn = () => sut.abort();
+    expect(fn).toThrowError(ABORT_ERROR_PATTERN);
   });
 
 
@@ -54,7 +81,8 @@ describe("AsyncStatus throws an Error when", function() {
     // async process
     sut.end();
     expect(sut.isIdle).toBe(true);
-    expect(sut.abort).toThrowError();
+    const fn = () => sut.abort();
+    expect(fn).toThrowError(ABORT_ERROR_PATTERN);
   });
 
 
@@ -64,7 +92,8 @@ describe("AsyncStatus throws an Error when", function() {
     // async process
     sut.abort();
     expect(sut.isIdle).toBe(true);
-    expect(sut.end).toThrowError();
+    const fn = () => sut.end();
+    expect(fn).toThrowError(END_ERROR_PATTERN);
   });
 
 });

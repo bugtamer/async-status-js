@@ -19,7 +19,7 @@ enum State {
 
 
 /**
- * Implementation for managing the async status of a process.
+ * Async process status management.
  * @version 0.0.0
  * @license MIT
  * @author Bugtamer
@@ -27,10 +27,6 @@ enum State {
 export class AsyncStatus implements IAsyncStatus {
 
   static readonly undefinedTime = -1;
-  static readonly startErrorMessage = `'start()' cannot be called in 'started' state.`;
-  static readonly endErrorMessage = `'end()' cannot be called in 'idle' state.`;
-  static readonly abortErrorMessage = `'abort()' cannot be called in 'idle' state.`;
-  static readonly overflowErrorMessage =`Overflow error.`;
   
   start(): void {
     this._forbiddenStateGuard(this.isOngoing, AsyncStatus.startErrorMessage);
@@ -136,7 +132,12 @@ export class AsyncStatus implements IAsyncStatus {
   // times
   protected _initialTime = 0;
   protected _finalTime = AsyncStatus.undefinedTime;
-  // states
+  // state
   protected _status: State = State.idle;
+  // messages
+  protected static readonly startErrorMessage = `'start()' cannot be called in 'started' state.`;
+  protected static readonly endErrorMessage = `'end()' cannot be called in 'idle' state.`;
+  protected static readonly abortErrorMessage = `'abort()' cannot be called in 'idle' state.`;
+  protected static readonly overflowErrorMessage =`Overflow error.`;
 
 }
