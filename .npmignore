@@ -4,3 +4,4 @@ spec/
 .nyc_output/
 *.ts
 *.spec.js
+*.spec.d.js
