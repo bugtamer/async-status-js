@@ -1,5 +1,6 @@
 node_modules/
 coverage/
+spec/
 .nyc_output/
-lib/
-*.js
+*.ts
+*.spec.js

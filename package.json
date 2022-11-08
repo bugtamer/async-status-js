@@ -2,14 +2,16 @@
   "name": "@bugtamer/async-status",
   "version": "0.0.0",
   "description": "Asynchronous process status helper.",
-  "main": "index.js",
+  "main": "./lib/async-status.js",
+  "types": "./lib/async-status.d.js",
   "scripts": {
     "transpile": "tsc",
-    "test": "tsc --outDir spec && jasmine",
-    "coverage": "nyc --reporter=lcov npm run test"
+    "test": "tsc --outDir ./spec && jasmine",
+    "coverage": "nyc --reporter=lcov --reporter text -t coverage npm run test",
+    "build": "npm run transpile && npm run coverage"
   },
   "nyc": {
-    "report-dir": "spec/coverage",
+    "report-dir": "coverage",
     "exclude": [
       "spec/**/*.interface.js",
       "spec/**/*.spec.js"
