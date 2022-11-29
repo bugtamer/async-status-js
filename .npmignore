@@ -5,3 +5,4 @@ spec/
 *.ts
 *.spec.js
 *.spec.d.js
+*.npm-access-token.txt
