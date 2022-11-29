@@ -1,6 +1,6 @@
 /**
  * AsyncStatus Interface to define how to manage the status of an async process.
- * @version 0.0.0
+ * @version 0.0.1
  * @license MIT
  * @author Bugtamer
  */
