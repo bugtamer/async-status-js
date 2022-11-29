@@ -1,6 +1,12 @@
-# async-status-js
+# Async Status
 
 Manages the status of an async process.
+
+## Installation
+
+`npm i @bugtamer/async-status`
+
+See [npmjs.com](https://www.npmjs.com/package/@bugtamer/async-status)
 
 ## Basic usage examples
 
