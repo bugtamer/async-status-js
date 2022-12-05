@@ -1,4 +1,4 @@
-# Async Status
+# AsyncStatus
 
 Manages the status of an async process.
 
@@ -16,6 +16,11 @@ Manages the status of an async process.
 `import { AsyncStatus } from '@bugtamer/async-status/lib/async-status';`
 
 ## Basic usage examples
+
+[AsyncStatus source code](https://github.com/bugtamer/async-status-js)
+[Live demo source code](https://github.com/bugtamer/ng-async-status-example)
+[Live demo](https://bugtamer.github.io/ng-async-status-example/)
+[NPM](https://www.npmjs.com/package/@bugtamer/async-status)
 
 ### async / await
 
