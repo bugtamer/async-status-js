@@ -2,11 +2,18 @@
 
 Manages the status of an async process.
 
+- Built-in TypeScript declarations.
+- Comprehensive unit testing.
+
 ## Installation
+
+**As project dependency**
 
 `npm i @bugtamer/async-status`
 
-See [npmjs.com](https://www.npmjs.com/package/@bugtamer/async-status)
+**As script dependency**
+
+`import { AsyncStatus } from '@bugtamer/async-status/lib/async-status';`
 
 ## Basic usage examples
 
@@ -87,8 +94,7 @@ const subscription = fetchData().subscribe(
 
 ### Measure the time
 
-- `dataAsyncStatus.elapsedTime` returns the elapsed time in milliseconds between a call to `start()` and a call to `end()` or `abort()`. Returns `-1` when the time difference cannot be calculated or does not make sense.
-
+- `dataAsyncStatus.elapsedTime` returns the elapsed time in milliseconds between the last call to `start()` and a call to `end()`, `abort()` or current time if neither of them were called . Returns `-1` when `start()` has never been called.
 
 ## Final notes
 - Using a single instance of `AsyncStatus` to control multiple independent asynchronous processes that overlap in time could lead to erratic behavior in your code.

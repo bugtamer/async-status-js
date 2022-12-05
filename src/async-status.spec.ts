@@ -1,4 +1,4 @@
-import { AsyncStatus } from './async-status';
+import {AsyncStatus } from './async-status';
 
 
 const OVERFLOW_ERROR_PATTERN = /overflow/i;
@@ -12,20 +12,24 @@ class AsyncStatusOverflowCase extends AsyncStatus {
   }
 }
 
+function delay(timeout: number, callback: Function): Promise<void> {
+  return new Promise(  (resolve) => setTimeout(callback, timeout)  );
+}
+
 
 describe("AsyncStatus throws an Error when", function() {
 
-  it("attemptCount overflows", function() { 
+  it("attemptCount overflows: 9_007_199_254_740_991 * {start() --> [end() | abort()]} --> start()", function() {
     const sut = new AsyncStatusOverflowCase();
     sut.start();
     sut.end();
-    sut.setAttemptCount(Number.MAX_SAFE_INTEGER); // start() --> end() | abort() cycles...
+    sut.setAttemptCount(Number.MAX_SAFE_INTEGER); // to test an (nearly) unreachable condition
     const fn = () => sut.start();
     expect(fn).toThrowError(OVERFLOW_ERROR_PATTERN);
   });
 
 
-  it("start() is never called and end() is called", function() { 
+  it("start() was never called but end() was: new AsyncStatus() --> end()", function() {
     const sut = new AsyncStatus();
     // nothing is already running
     expect(sut.isIdle).toBe(true);
@@ -34,7 +38,7 @@ describe("AsyncStatus throws an Error when", function() {
   });
 
 
-  it("start() is never called and abort() does", function() { 
+  it("start() was never called but abort() was: new AsyncStatus() --> abort()", function() {
     const sut = new AsyncStatus();
     // nothing is already running
     expect(sut.isIdle).toBe(true);
@@ -43,7 +47,7 @@ describe("AsyncStatus throws an Error when", function() {
   });
 
 
-  it("start() is called in isOngoing state", function() { 
+  it("start() is called in isOngoing state: start() --> start()", function() {
     const sut = new AsyncStatus();
     sut.start();
     // async process
@@ -53,7 +57,7 @@ describe("AsyncStatus throws an Error when", function() {
   });
 
 
-  it("start() --> end() --> end()", function() { 
+  it("end() is called in isIdle state: start() --> end() --> end()", function() {
     const sut = new AsyncStatus();
     sut.start();
     // async process
@@ -64,7 +68,7 @@ describe("AsyncStatus throws an Error when", function() {
   });
 
 
-  it("start() --> abort() --> abort()", function() { 
+  it("abort() is called in isIdle state: start() --> abort() --> abort()", function() {
     const sut = new AsyncStatus();
     sut.start();
     // async process
@@ -75,7 +79,7 @@ describe("AsyncStatus throws an Error when", function() {
   });
 
 
-  it("start() --> end() --> abort()", function() { 
+  it("abort() is called in isIdle state: start() --> end() --> abort()", function() {
     const sut = new AsyncStatus();
     sut.start();
     // async process
@@ -86,7 +90,7 @@ describe("AsyncStatus throws an Error when", function() {
   });
 
 
-  it("start() --> abort() --> end()", function() { 
+  it("end() is called in isIdle state: start() --> abort() --> end()", function() {
     const sut = new AsyncStatus();
     sut.start();
     // async process
@@ -102,10 +106,72 @@ describe("AsyncStatus throws an Error when", function() {
 
 
 
-describe("AsyncStatus when there is zero calls", function() {
+describe("AsyncStatus timeElapse", function() {
+  const milliseconds = 10;
+
+  it("should be -1 just after instantiation", function() {
+    const sut = new AsyncStatus();
+    expect(sut.elapsedTime).toEqual(-1);
+  });
+
+
+  it("should return approximately the elapse time between start() and end() calls", function() {
+    const sut = new AsyncStatus();
+    sut.start();
+    delay(milliseconds, () => {
+      sut.end()
+      expect(sut.elapsedTime).toBeGreaterThanOrEqual(milliseconds);
+    });
+  });
+
+
+  it("should return approximately the time elapsed since the call of start() and abort()", function() {
+    const sut = new AsyncStatus();
+    sut.start();
+    delay(milliseconds, () => {
+      sut.abort()
+      expect(sut.elapsedTime).toBeGreaterThanOrEqual(milliseconds);
+    });
+  });
+
+
+  it("should return roughly the time elapsed since start(), .elapsedTime and end(): start() --> .elapsedTime --> end() --> .elapsedTime", function() {
+    const sut = new AsyncStatus();
+    sut.start();
+    delay(milliseconds, () => {
+      expect(sut.elapsedTime).toBeGreaterThanOrEqual(milliseconds);
+      expect(sut.elapsedTime).toBeLessThan(2 * milliseconds);
+      delay(milliseconds, () => {
+        sut.end();
+        expect(sut.elapsedTime).toBeGreaterThanOrEqual(2 * milliseconds);
+      });
+    });
+  });
+
+
+  it("should return roughly the time elapsed since start(), .elapsedTime and abort(): start() --> .elapsedTime --> abort() --> .elapsedTime", function() {
+    const sut = new AsyncStatus();
+    sut.start();
+    delay(milliseconds, async () => {
+      expect(sut.elapsedTime).toBeGreaterThanOrEqual(milliseconds);
+      expect(sut.elapsedTime).toBeLessThan(2 * milliseconds);
+      delay(milliseconds, () => {
+        sut.abort()
+        expect(sut.elapsedTime).toBeGreaterThanOrEqual(2 * milliseconds);
+      });
+    });
+  });
+
+});
+
+
+
+
+
+describe("AsyncStatus when there is zero calls of start(), end() or abort()", function() {
   const sut = new AsyncStatus();
 
-  it("attempts = 0", function() { 
+  it("attempts = 0", function() {
     expect(sut.attempts).toEqual(0);
   });
 
@@ -172,6 +238,32 @@ describe("AsyncStatus when resetAttemptStats() is called", function() {
     expect(sut.failedAttempts).toEqual(0);
   });
 
+  it("wasSuccessful = false: after abort() call", function() {
+    expect(sut.wasSuccessful).toEqual(false);
+  });
+
+  it("wasFailed = true: after abort() call", function() {
+    expect(sut.wasFailed).toEqual(true);
+  });
+
+  it("wasSuccessful = true: after end() call", function() {
+    const sut = new AsyncStatus();
+    sut.start();
+    // async process
+    sut.end();
+    sut.resetAttemptStats();
+      expect(sut.wasSuccessful).toEqual(true);
+  });
+
+  it("wasFailed = false: after end() call", function() {
+    const sut = new AsyncStatus();
+    sut.start();
+    // async process
+    sut.end();
+    sut.resetAttemptStats();
+    expect(sut.wasFailed).toEqual(false);
+  });
+
 });
 
 
@@ -198,8 +290,8 @@ describe("AsyncStatus when start() was called", function() {
   });
 
 
-  it("elapsedTime = -1", function() {
-    expect(sut.elapsedTime).toEqual(-1);
+  it("elapsedTime >= 0", function() {
+    expect(sut.elapsedTime).toBeGreaterThanOrEqual(0); // there is no time consuming process
   });
 
 
@@ -250,7 +342,7 @@ describe("AsyncStatus when start() --> abort() were called", function() {
 
 
   it("elapsedTime >= 0", function() {
-    expect(sut.elapsedTime).toBeGreaterThanOrEqual(0);
+    expect(sut.elapsedTime).toBeGreaterThanOrEqual(0); // there is no time consuming process
   });
 
 
@@ -301,7 +393,7 @@ describe("AsyncStatus when start() --> end() were called", function() {
 
 
   it("elapsedTime >= 0", function() {
-    expect(sut.elapsedTime).toBeGreaterThanOrEqual(0);
+    expect(sut.elapsedTime).toBeGreaterThanOrEqual(0); // there is no time consuming process
   });
 
 
@@ -353,8 +445,8 @@ describe("AsyncStatus when start() --> end() --> start() were called", function(
   });
 
 
-  it("elapsedTime = -1", function() {
-    expect(sut.elapsedTime).toEqual(-1);
+  it("elapsedTime >= 0", function() {
+    expect(sut.elapsedTime).toBeGreaterThanOrEqual(0); // there is no time consuming process
   });
 
 
@@ -408,7 +500,7 @@ describe("AsyncStatus when start() --> end() --> start() --> end() were called",
 
 
   it("elapsedTime >= 0", function() {
-    expect(sut.elapsedTime).toBeGreaterThanOrEqual(0);
+    expect(sut.elapsedTime).toBeGreaterThanOrEqual(0); // there is no time consuming process
   });
 
 
@@ -462,7 +554,7 @@ describe("AsyncStatus when start() --> end() --> start() --> abort() were called
 
 
   it("elapsedTime >= 0", function() {
-    expect(sut.elapsedTime).toBeGreaterThanOrEqual(0);
+    expect(sut.elapsedTime).toBeGreaterThanOrEqual(0); // there is no time consuming process
   });
 
 
@@ -516,7 +608,7 @@ describe("AsyncStatus when start() --> abort() --> start() --> abort() were call
 
 
   it("elapsedTime >= 0", function() {
-    expect(sut.elapsedTime).toBeGreaterThanOrEqual(0);
+    expect(sut.elapsedTime).toBeGreaterThanOrEqual(0); // there is no time consuming process
   });
 
 
