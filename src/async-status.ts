@@ -22,7 +22,14 @@ enum State {
  */
 export class AsyncStatus {
 
-  static readonly undefinedTime = -1;
+  static readonly UNDEFINED_TIME = -1;
+  
+  /**
+   * Replace `AsyncStatus.undefinedTime` with `AsyncStatus.UNDEFINED_TIME`.
+   * @deprecated
+   * @see `AsyncStatus.UNDEFINED_TIME`
+   */
+  static readonly undefinedTime = AsyncStatus.UNDEFINED_TIME;
 
   /**
    * Flag the process as execution in progress.
@@ -36,7 +43,7 @@ export class AsyncStatus {
     this._status = State.started;
     this._attemptCount++;
     this._initialTime = this._currentTime();
-    this._finalTime = AsyncStatus.undefinedTime;
+    this._finalTime = AsyncStatus.UNDEFINED_TIME;
   }
 
 
@@ -116,7 +123,7 @@ export class AsyncStatus {
    */
   get elapsedTime(): number {
     if (this._status === State.idle) {
-      return AsyncStatus.undefinedTime;
+      return AsyncStatus.UNDEFINED_TIME;
     }
     if (this._status === State.started) {
       return this._currentTime() - this._initialTime;
@@ -178,7 +185,7 @@ export class AsyncStatus {
   protected _failedAttemptCount = 0;
   // times
   protected _initialTime = 0;
-  protected _finalTime = AsyncStatus.undefinedTime;
+  protected _finalTime = AsyncStatus.UNDEFINED_TIME;
   // state
   protected _status: State = State.idle;
   // messages
