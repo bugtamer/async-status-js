@@ -17,7 +17,6 @@ enum State {
 
 /**
  * Async process status management.
- * @version 0.0.2
  * @license MIT
  * @author Bugtamer
  */
