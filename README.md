@@ -4,29 +4,62 @@ Manages the status of an async process.
 
 - Built-in TypeScript declarations.
 - Comprehensive unit testing.
+- [Live demo](https://runkit.com/bugtamer/usage-example-of-bugtamer-async-status)
+- [Available at npmjs.com](https://www.npmjs.com/package/@bugtamer/async-status)
 - [Source Code](https://github.com/bugtamer/async-status-js)
+
+## Table Of Content
+
+- [Installation](#installation)
+  - [As project dependency](#as-project-dependency)
+  - [As script dependency](#as-script-dependency)
+- [Basic usage examples](#basic-usage-examples)
+  - [async / await](#async-await)
+  - [Observable](#observable)
+- [Status management / Class interface](#status-management-class-interface)
+  - [Use](#use)
+  - [Check attempt stats](#check-attempt-stats) (succeded | failed | total)
+  - [Check current state](#check-current-state) (idle | ongoing)
+  - [Check last outcome state](#check-last-outcome-state) (succeded | failed)
+  - [Measure the time](#measure-the-time)
+- [Final notes](#final-notes)
 
 ## Installation
 
-**As project dependency**
+### As project dependency
 
 `npm i @bugtamer/async-status`
 
-- [NPM](https://www.npmjs.com/package/@bugtamer/async-status)
+[Available at npmjs.com](https://www.npmjs.com/package/@bugtamer/async-status)
 
-**As script dependency**
+### As script dependency
 
-`import { AsyncStatus } from '@bugtamer/async-status/lib/async-status';`
+```javascript
+const bugtamer = require("@bugtamer/async-status")
+const dataAsyncStatus = new bugtamer.AsyncStatus();
+```
+
+```javascript
+const bugtamer = require("@bugtamer/async-status/lib/async-status")
+const dataAsyncStatus = new bugtamer.AsyncStatus();
+```
+
+```javascript
+import { AsyncStatus } from '@bugtamer/async-status/lib/async-status';
+const dataAsyncStatus = new AsyncStatus();
+```
+
+
 
 ## Basic usage examples
 
-- [Live demo](https://bugtamer.github.io/ng-async-status-example/)
-- [Live demo source code](https://github.com/bugtamer/ng-async-status-example)
+- [Live vanilla JS demo](https://runkit.com/bugtamer/usage-example-of-bugtamer-async-status)
+- [Live Angular demo](https://bugtamer.github.io/ng-async-status-example/)
+- [Live Angular demo source code](https://github.com/bugtamer/ng-async-status-example)
 
 ### async / await
 
-```typescript
-const dataAsyncStatus = new AsyncStatus();
+```javascript
 dataAsyncStatus.start();
 try {
     data = await fetchData();
@@ -38,8 +71,7 @@ try {
 
 ### Observable
 
-```typescript
-const dataAsyncStatus = new AsyncStatus();
+```javascript
 dataAsyncStatus.start();
 const subscription = fetchData().subscribe(
     response => {
