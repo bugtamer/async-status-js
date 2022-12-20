@@ -10,7 +10,7 @@
     "coverage": "nyc --reporter=lcov --reporter text -t coverage npm run test",
     "build": "npm run transpile && npm run coverage",
     "login": "npm login",
-    "publish": "npm run build && npm publish --dry-run"
+    "release:testing": "npm run build && npm publish --dry-run"
   },
   "nyc": {
     "report-dir": "coverage",
