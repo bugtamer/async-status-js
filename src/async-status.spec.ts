@@ -1,4 +1,4 @@
-import {AsyncStatus } from './async-status';
+import { AsyncStatus } from './async-status';
 
 
 const OVERFLOW_ERROR_PATTERN = /overflow/i;
