@@ -3,8 +3,5 @@ coverage/
 spec/
 src/
 .nyc_output/
-*.spec.js
-*.spec.ts
-*.spec.d.js
-*.spec.d.ts
+*.spec.*
 *.npm-access-token.txt
