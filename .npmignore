@@ -4,4 +4,5 @@ spec/
 src/
 .nyc_output/
 *.spec.*
+.nycrc.json
 *.npm-access-token.txt

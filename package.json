@@ -7,17 +7,10 @@
   "scripts": {
     "transpile": "tsc",
     "test": "tsc --outDir ./spec && jasmine",
-    "coverage": "nyc --reporter=lcov --reporter text -t coverage npm run test",
+    "coverage": "nyc -t coverage npm run test",
     "build": "npm run transpile && npm run coverage",
     "login": "npm login",
     "release:testing": "npm run build && npm publish --dry-run"
-  },
-  "nyc": {
-    "report-dir": "coverage",
-    "exclude": [
-      "spec/**/*.interface.js",
-      "spec/**/*.spec.js"
-    ]
   },
   "repository": {
     "type": "git",
