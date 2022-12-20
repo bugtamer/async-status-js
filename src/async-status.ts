@@ -1,7 +1,7 @@
 enum State {
 
   /** Never executed */
-  no_calls,
+  noCalls,
 
   /** Already running */
   started,
@@ -122,7 +122,7 @@ export class AsyncStatus {
    * `-1` is returned when `start()` has never been called.
    */
   get elapsedTime(): number {
-    if (this._status === State.no_calls) {
+    if (this._status === State.noCalls) {
       return AsyncStatus.UNDEFINED_TIME;
     }
     if (this._status === State.started) {
@@ -187,7 +187,7 @@ export class AsyncStatus {
   protected _initialTime = 0;
   protected _finalTime = AsyncStatus.UNDEFINED_TIME;
   // state
-  protected _status: State = State.no_calls;
+  protected _status: State = State.noCalls;
   // messages
   protected static readonly startErrorMessage = `'start()' cannot be called in 'started' state.`;
   protected static readonly endErrorMessage = `'end()' cannot be called in 'idle' state.`;
