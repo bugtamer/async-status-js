@@ -23,13 +23,6 @@ enum State {
 export class AsyncStatus {
 
   static readonly UNDEFINED_TIME = -1;
-  
-  /**
-   * Replace `AsyncStatus.undefinedTime` with `AsyncStatus.UNDEFINED_TIME`.
-   * @deprecated
-   * @see `AsyncStatus.UNDEFINED_TIME`
-   */
-  static readonly undefinedTime = AsyncStatus.UNDEFINED_TIME;
 
   /**
    * Flag the process as execution in progress.
