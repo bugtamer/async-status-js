@@ -1,0 +1,12 @@
+{
+  "compress": {
+    "passes": 3
+  },
+  "output": {
+    "comments": false
+  },
+  "sourceMap": {
+    "content": "./lib/async-status.js.map",
+    "filename": "./lib/async-status.js.map"
+  }
+}
