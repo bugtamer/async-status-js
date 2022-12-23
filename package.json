@@ -5,13 +5,14 @@
   "main": "./lib/async-status.js",
   "types": "./lib/async-status.d.js",
   "scripts": {
+    "clean:bash": "rm -rf ./lib ./coverage",
     "transpile": "tsc --diagnostics",
     "minify": "npm run transpile && uglifyjs ./lib/async-status.js --output ./lib/async-status.js --config-file ./uglify-js.json",
     "test": "npm run minify && jasmine --config=./jasmine.json",
     "coverage": "nyc -t coverage npm run test",
     "build": "npm run coverage",
-    "login": "npm login",
-    "release:testing": "npm run build && npm publish --dry-run"
+    "release:testing": "npm run build && npm publish --dry-run",
+    "release": "npm run release:testing && npm run login && npm publish && npm run logout"
   },
   "repository": {
     "type": "git",
