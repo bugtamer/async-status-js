@@ -5,6 +5,7 @@
   "main": "./lib/async-status.js",
   "types": "./lib/async-status.d.js",
   "scripts": {
+    "clean:cmd": "rmdir /s /q lib coverage",
     "clean:bash": "rm -rf ./lib ./coverage",
     "transpile": "tsc --diagnostics",
     "minify": "npm run transpile && uglifyjs ./lib/async-status.js --output ./lib/async-status.js --config-file ./uglify-js.json",
