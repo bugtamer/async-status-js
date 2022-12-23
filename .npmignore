@@ -1,8 +1,6 @@
 node_modules/
 coverage/
-spec/
 src/
-.nyc_output/
 *.spec.*
-.nycrc.json
+*.json
 *.npm-access-token.txt
