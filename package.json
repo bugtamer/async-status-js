@@ -5,14 +5,17 @@
   "main": "./lib/async-status.js",
   "types": "./lib/async-status.d.js",
   "scripts": {
+    "clean": "fse remove ./lib && fse remove ./coverage",
     "clean:cmd": "rmdir /s /q lib coverage",
     "clean:bash": "rm -rf ./lib ./coverage",
-    "transpile": "tsc --diagnostics",
-    "minify": "npm run transpile && uglifyjs ./lib/async-status.js --output ./lib/async-status.js --config-file ./uglify-js.json",
+    "transpile:diagnostics": "tsc --diagnostics",
+    "transpile": "tsc && fse copy ./lib/transpilation/async-status.spec.js ./lib/async-status.spec.js",
+    "minify": "npm run transpile && uglifyjs ./lib/transpilation/async-status.js --output ./lib/async-status.js --config-file ./uglify-js.json",
     "test": "npm run minify && jasmine --config=./jasmine.json",
-    "coverage": "nyc -t coverage npm run test",
+    "coverage": "nyc npm run test",
     "build": "npm run coverage",
-    "release:testing": "npm run build && npm publish --dry-run",
+    "update-release-versions": "npm install --package-lock-only",
+    "release:testing": "npm run update-release-versions && npm run build && npm publish --dry-run",
     "release": "npm run release:testing && npm run login && npm publish && npm run logout"
   },
   "repository": {
@@ -65,6 +68,7 @@
   },
   "homepage": "https://github.com/bugtamer/async-status-js#readme",
   "devDependencies": {
+    "@atao60/fse-cli": "^0.1.7",
     "@types/jasmine": "^4.3.0",
     "@types/node": "^18.11.9",
     "jasmine": "^4.5.0",
