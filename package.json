@@ -16,7 +16,7 @@
     "build": "npm run coverage",
     "update-release-versions": "npm install --package-lock-only",
     "release:testing": "npm run update-release-versions && npm run build && npm publish --dry-run",
-    "release": "npm run release:testing && npm run login && npm publish && npm run logout"
+    "release": "npm run release:testing && npm login && npm publish && npm logout"
   },
   "repository": {
     "type": "git",
