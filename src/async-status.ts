@@ -1,6 +1,3 @@
-import { performance } from 'perf_hooks';
-
-
 enum State {
 
   /** Never executed */
@@ -156,11 +153,10 @@ export class AsyncStatus {
 
 
   /**
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/Performance/now
    * @returns milliseconds
    */
   protected _currentTime(): number {
-    return performance.now();
+    return Date.now();
   }
 
 
