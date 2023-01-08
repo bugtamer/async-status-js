@@ -1,6 +1,6 @@
 {
   "name": "@bugtamer/async-status",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Asynchronous process status helper.",
   "main": "./lib/async-status.js",
   "types": "./lib/async-status.d.js",
@@ -15,7 +15,7 @@
     "coverage": "nyc npm run test",
     "build": "npm run coverage",
     "update-release-versions": "npm install --package-lock-only",
-    "release:testing": "npm run update-release-versions && npm run build && npm publish --dry-run",
+    "release:testing": "npm audit && npm run update-release-versions && npm run build && npm publish --dry-run",
     "release": "npm run release:testing && npm login && npm publish && npm logout"
   },
   "repository": {
@@ -34,7 +34,7 @@
     "manager",
     "handler",
     "helper",
-    "zero dependencies",
+    "loading",
     "event",
     "XHR",
     "XmlHttpRequest",
