@@ -77,11 +77,9 @@ dataAsyncStatus.start();
 const subscription = fetchData().subscribe(
     response => {
         data = response;
-        subscription.unsubscribe();
         dataAsyncStatus.end();
     },
     error => {
-        subscription.unsubscribe();
         dataAsyncStatus.abort();
     }
 );
